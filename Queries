@@ -1,0 +1,216 @@
+
+//questions 
+
+
+3. get number problems solved in codekata by combining the users
+
+SOLN: SELECT c.id , u.Student_Name , c.Problems_Solved
+      FROM codekata c INNER JOIN users u 
+      ON c.Student_Id = u.id;
+
+4. display the no of company drives attended by a user
+SOLN: SELECT user_id ,
+      COUNT(*) AS drive_attended
+      FROM attendance GROUP BY user_id;
+
+5. combine and display students_activated_courses and courses for a specific user groping them based on the course
+
+SOLN:use students;
+SELECT user_id ,COUNT(*) AS activated_course_for_user
+ FROM students_activated_courses GROUP BY user_id;
+
+6. list all the mentors
+
+SOLN:use students;
+     SELECT DISTINCT Mentor_Name FROM mentors;
+ 
+7. list the number of students that are assigned for a mentor
+
+SOLN:use students;
+     SELECT  Mentor_Name,
+     COUNT(*) AS total_students_assigned 
+     FROM mentors GROUP BY Mentor_Name;
+     
+     
+
+1. Create tables for the above list given
+2. insert at least 5 rows of values in each table
+
+//creating users table
+
+use students;
+create table users (id integer auto_increment,
+Student_Name varchar(100),
+Email_Id varchar(100),
+Contact integer,
+primary key (id) );
+
+insert into users (Student_Name , Email_Id ,Contact) 
+values ("Mahesh Patil" , "maheshpatil123@gmail.com" , 123654785),
+("Deepak Sankpal" , "deepak34232@gmail.com" , 135284796),
+("Rakesh Dalavi" , "dalavirakesh22@gmail.com" , 256478931),
+("Prasad Dhanawade" , "prasad54yt@gmail.com" , 254178524),
+("Sanket Chavan" , "sanketbond345@gmail.com" , 458712367),
+("Utkarsh Shinde" , "utkarshshinde3@gmail.com" , 236478159)
+
+
+// creating codekata table with references to users
+
+use students;
+create table Codekata (id integer auto_increment,
+Student_Id integer,
+Problems_Solved integer,
+primary key (id),
+foreign key (Student_Id) references  users(id)
+);
+
+insert into Codekata (Student_Id , Problems_Solved) 
+values (1 ,109 ),
+(2 ,105),
+(3,99),
+(4,110),
+(5, 112),
+(6 , 120)
+
+
+// creating topics table
+
+use students;
+create table Topics (id integer auto_increment,
+Topic varchar(100),
+Week_Days varchar(100),
+Completion_Status  varchar(100),
+primary key(id)
+);
+
+insert into Topics ( Topic ,Week_Days , Completion_Status) 
+values("HTML" , "Monday" , "Completed"),
+("Css and Javascript" , "Tuesday" , "Completed"),
+("React" , "Wednesday" , "Completed" ),
+("Mysql" , "Thursday" , "Completed"),
+("MongoDB" , "Friday" , "Completed"),
+("NodeJs" , "Saturday" , "Pending")
+
+
+//creating tasks table
+
+use students;
+create table tasks (id integer auto_increment,
+Topic_id integer ,
+Tasks varchar (100),
+primary key (id),
+foreign key(Topic_id) references topics (id)
+);
+
+insert into tasks (Topic_id , Tasks )
+values ( 1 ,"task1"),
+(2,"task2"),
+(3 , "task3 "),
+(4 , "task4 " ),
+(5 , "task5" ),
+(6 , "task6" )
+
+//mentors data creating
+
+use students;
+create table mentors (id integer auto_increment,
+Mentor_Name varchar(100),
+Student_id integer,
+primary key (id),
+foreign key (Student_id) references users(id)
+);
+
+insert into mentors ( Mentor_Name , Student_Id)
+values("Nilesh" , 1),
+("Nilesh" , 2),
+("Akshay" , 3),
+("Nayan" , 4),
+("Nayan" , 5),
+("Venkat" , 6)
+
+// courses table
+
+use students;
+create table Courses (id integer auto_increment,
+course varchar(100),
+primary key(id)
+);
+
+insert into Courses (course)
+values ("Java Developer"),
+("Anroid AppDeveloper"),
+("FullStack_Developer"),
+("Os_developer"),
+("Back_End Developer"),
+("FrontEnd Developer")
+
+//activated_courses
+
+use students;
+create table students_activated_courses(id integer auto_increment,
+user_id integer,
+activated_course_id integer,
+primary key (id),
+foreign key (user_Id) references users(id),
+foreign key (activated_course_id ) references courses (id)
+);
+insert into students_activated_courses (user_id , activated_course_id)
+values( 1 , 1),
+(1, 3 ),
+(1, 4 ),
+(2, 2 ),
+(2, 5 ),
+(3, 1 ),
+(3, 2 ),
+(3, 6 ),
+(4, 1 ),
+(5, 2 ),
+(5, 3 ),
+(5, 6 ),
+(6, 1 )
+
+//drive table
+use students;
+create table company_drives(id integer auto_increment,
+company_name varchar (50),
+drive_month varchar (15),
+primary key (id)
+);
+
+insert into company_drives(company_name , drive_month)
+values("TCS " , "jan" ),
+("Wipro" , "feb"),
+("Infosys" ,  "march" ),
+("Flipcart" , "April"),
+("Amazon" , "May" ),
+("Zoho" , "jun")
+
+
+
+//attendance table
+
+use students;
+create table attendance (id integer auto_increment,
+user_id integer,
+company_id integer,
+attendance varchar(10),
+primary key (id),
+foreign key (user_id) references users(id),
+foreign key (company_id) references company_drives(id)
+);
+
+
+insert into attendance (user_id , company_id, attendance)
+values ( 1 , 1 , "present"),
+( 1 , 4 , "present"),
+( 1 , 6 , "present"),
+( 2 , 1 , "present"),
+( 2 , 2 , "present"),
+( 3 , 3 , "present"),
+( 3 , 4 , "present"),
+( 3 , 5 , "present"),
+( 3 , 6 , "present"),
+( 4 , 1 , "present"),
+( 5 , 2 , "present"),
+( 6 , 3 , "present"),
+( 6 , 6 , "present")
